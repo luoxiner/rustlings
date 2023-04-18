@@ -2,10 +2,13 @@
 // Address all the TODOs to make the tests pass!
 // Execute `rustlings hint enums3` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
-
 enum Message {
     // TODO: implement the message variant types based on their usage below
+    ChangeColor(i32, i32, i32),
+    Echo(String),
+    Quit,
+    Move(Point),
+    Time{h: i32, min: i32},
 }
 
 struct Point {
@@ -39,6 +42,23 @@ impl State {
     fn process(&mut self, message: Message) {
         // TODO: create a match expression to process the different message variants
         // Remember: When passing a tuple as a function argument, you'll need extra parentheses: fn function((t, u, p, l, e))
+        match message {
+            Message::ChangeColor(c1,c2,c3) => {
+                self.change_color((c1.try_into().unwrap(), c2.try_into().unwrap(), c3.try_into().unwrap()));
+            },
+            Message::Echo(content) => {
+                self.echo(content);
+            },
+            Message::Move(point) => {
+                self.move_position(point);
+            },
+            Message::Quit => {
+                self.quit();
+            },
+            Message::Time{h, min} => {
+                println!("x is {} , y is {}", h, min);
+            }
+        }
     }
 }
 
@@ -57,6 +77,7 @@ mod tests {
         state.process(Message::Echo(String::from("hello world")));
         state.process(Message::Move(Point { x: 10, y: 15 }));
         state.process(Message::Quit);
+        state.process(Message::Time{h: 1, min: 3});
 
         assert_eq!(state.color, (255, 0, 255));
         assert_eq!(state.position.x, 10);
